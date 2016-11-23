@@ -1,0 +1,47 @@
+﻿'========================================================================
+'Kartris - www.kartris.com
+'Copyright 2016 CACTUSOFT
+
+'GNU GENERAL PUBLIC LICENSE v2
+'This program is free software distributed under the GPL without any
+'warranty.
+'www.gnu.org/licenses/gpl-2.0.html
+
+'KARTRIS COMMERCIAL LICENSE
+'If a valid license.config issued by Cactusoft is present, the KCL
+'overrides the GPL v2.
+'www.kartris.com/t-Kartris-Commercial-License.aspx
+'========================================================================
+Imports CkartrisImages
+Imports CkartrisDisplayFunctions
+Imports KartSettingsManager
+
+''' <summary>
+''' User Control Template for the Normal View of the Child Categories (SubCategories)
+''' </summary>
+''' <remarks>By Mohammad</remarks>
+Partial Class SubCategoryTemplateNormal
+    Inherits System.Web.UI.UserControl
+
+    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+        lnkCategoryName.NavigateUrl = SiteMapHelper.CreateURL(SiteMapHelper.Page.Category, _
+                                        litCategoryID.Text, Request.QueryString("strParent") & "," & Request.QueryString("CategoryID"))
+
+        lnkMore.NavigateUrl = lnkCategoryName.NavigateUrl
+
+        UC_ImageView.CreateImageViewer(IMAGE_TYPE.enum_CategoryImage,
+            litCategoryID.Text,
+            KartSettingsManager.GetKartConfig("frontend.display.images.thumb.height"),
+            KartSettingsManager.GetKartConfig("frontend.display.images.thumb.width"),
+            lnkCategoryName.NavigateUrl, , , lnkCategoryName.Text)
+
+        '' Truncating the Description Text, depending on the related key in CONFIG Setting
+        '' The Full Description Text is Held by a Hidden Literal Control.
+        Dim intMaxChar As Integer
+        intMaxChar = GetKartConfig("frontend.categories.display.normal.truncatedescription")
+        litCategoryDesc.Text = TruncateDescription(litCategoryDescHidden.Text, intMaxChar)
+
+    End Sub
+
+End Class
